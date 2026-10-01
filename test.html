@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function clickMe1(){
+            alert('첫번째 버튼이 클릭되었습니다.');
+        }
+
+        function checkForm(e){
+            const username = document.querySelector("#username").value;
+            if(!username){
+                alert('이름을 입력하세요.');
+                username.placeholder = "이름을 입력하시라구요.";
+                username.focus();
+                e.preventDefault();
+            }
+
+            alert('폼이 제출되었습니다.');
+        }
+
+        window.addEventListener("load",function(){
+            const btn1 = document.querySelector("#btn1");
+            btn1.addEventListener("click", clickMe1);
+
+            const form1 = document.querySelector("#form1");
+            form1.addEventListener("submit",checkForm);
+        });
+
+
+        window.addEventListener("load",function(){
+            const fruit = document.querySelector("#fruit");
+            const addbtn = document.querySelector("#addbtn");
+            const fruitList = document.querySelector("#fruitList");
+
+
+            addbtn.addEventListener("click",function(){
+                let fruitName = fruit.value.split(",");
+                //for(let one of fruitName){
+                for(let i = 0; i < fruitName.length; i++){
+                    const li = document.createElement("li");
+                    li.textContent = fruitName[i];
+                    fruitList.appendChild(li);
+                    fruit.value = "";
+
+                    const btnX = document.createElement("button");
+                    btnX.textContent = "삭제";
+                    li.appendChild(btnX);
+                    btnX.addEventListener("click",function(){
+                        fruitList.removeChild(li);
+                    })
+                }
+
+            })
+        })
+
+
+    </script>
+</head>
+<body>
+    <button id="btn1">Click Me!</button><br>
+    <form action="login_ok.html" method="post">
+        <input type="text" name="username" placeholder="이름을 입력하세요" required/>
+        <input type="submit" value="로그인"/>
+        <input type="reset" value="초기화"/>
+    </form>
+    
+
+    <input type="text" id="fruit" placeholder="과일을 입력하세요" required/>
+    <button id="addbtn">추가</button> <br>
+    <ul id="fruitList"></ul>
+</body>
+</html>
