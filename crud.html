@@ -87,6 +87,33 @@
                 const professor = document.querySelector("#professor");
                 const place = document.querySelector("#location");
 
+                if (subject.value.trim() === "" || section.value.trim() === "" || time.value.trim() === "" || professor.value.trim() === "" ||  place.value.trim() === "") {
+                    alert("모든 칸을 입력하세요.");
+                    return;
+                }
+
+                const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+                if (!timePattern.test(time.value)) {
+                    alert("시간은 09:00 형식으로 입력하세요.");
+                    return;
+                }
+
+                const sectionPattern = /^\d+분반$/;
+
+                if (!sectionPattern.test(section.value.trim())) {
+                    alert("분반은 1분반 형식으로 입력하세요.");
+                    return;
+                }
+
+                const d = scheduleList.find(function (item) {
+                    return item.subject === subject.value && item.class === section.value;
+                });
+                if (d) {
+                    alert("이미 있는 과목입니다.");
+                    return;
+                }
+
                 scheduleList.push({
                     subject: subject.value,
                     class: section.value,
