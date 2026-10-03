@@ -8,22 +8,25 @@
     <script>
         let scheduleList = [
             {
+                id: 1,
                 subject: "OSS",
-                class: "1분반",
+                section: "1분반",
                 time: "09:00",
                 professor: "장소연",
                 location: "NTH 414"
             },
             {
+                id: 2,
                 subject: "컴퓨터구조",
-                class: "1분반",
+                section: "1분반",
                 time: "15:00",
                 professor: "용환기",
                 location: "NTH 220"
             },
             {
+                id: 3,
                 subject: "이산수학",
-                class: "1분반",
+                section: "1분반",
                 time: "13:30",
                 professor: "최희열",
                 location: "NTH 313"
@@ -32,8 +35,14 @@
 
         window.addEventListener("load", function(){
             const addbtn = document.querySelector("#addbtn");
+            const subject = document.querySelector("#subject");
+            const section = document.querySelector("#section");
+            const time = document.querySelector("#time");
+            const professor = document.querySelector("#professor");
+            const place = document.querySelector("#location");
             const schedultTable = document.querySelector("#scheduleTable");
             const list = document.querySelector("#list");
+            let editIndex = -1; 
 
             function render(){
                 list.innerHTML = "";
@@ -43,8 +52,8 @@
                     const tdSubject = document.createElement("td");
                     tdSubject.textContent = scheduleList[i].subject;
                     
-                    const tdClass = document.createElement("td");
-                    tdClass.textContent = scheduleList[i].class;
+                    const tdSection = document.createElement("td");
+                    tdSection.textContent = scheduleList[i].section;
                     
                     const tdTime = document.createElement("td");
                     tdTime.textContent = scheduleList[i].time;
@@ -56,7 +65,7 @@
                     tdLocation.textContent = scheduleList[i].location;
                     
                     tr.appendChild(tdSubject);
-                    tr.appendChild(tdClass);
+                    tr.appendChild(tdSection);
                     tr.appendChild(tdTime);
                     tr.appendChild(tdProfessor);
                     tr.appendChild(tdLocation);
@@ -65,28 +74,42 @@
 
                     const btnE = document.createElement("button");
                     btnE.textContent = "Edit";
-                    tr.appendChild(btnE);
-                    btnE.addEventListener("click",function(){
 
+                    const tdEdit = document.createElement("td");
+                    tdEdit.appendChild(btnE);
+                    tr.appendChild(tdEdit);
+
+                    
+
+
+                    btnE.addEventListener("click",function(){
+                        subject.value = scheduleList[i].subject;
+                        section.value = scheduleList[i].section;
+                        time.value = scheduleList[i].time;
+                        professor.value = scheduleList[i].professor;
+                        place.value = scheduleList[i].location;
+
+                        editIndex = i;
+                        
+                        addbtn.textContent = "저장";
                     });
 
                     const btnX = document.createElement("button");
                     btnX.textContent = "Delete";
-                    tr.appendChild(btnX);
+
+                    const tdDelete = document.createElement("td");
+                    tdDelete.appendChild(btnX);
+                    tr.appendChild(tdDelete);
                     btnX.addEventListener("click",function(){
-                        scheduleList.splice(i, 1);
-                        render();
+                        if(confirm("정말 삭제할까요?")){
+                            scheduleList.splice(i, 1);
+                            render();
+                        }   
                     });
                 }
             }
 
             addbtn.addEventListener("click",function(){
-                const subject = document.querySelector("#subject");
-                const section = document.querySelector("#section");
-                const time = document.querySelector("#time");
-                const professor = document.querySelector("#professor");
-                const place = document.querySelector("#location");
-
                 if (subject.value.trim() === "" || section.value.trim() === "" || time.value.trim() === "" || professor.value.trim() === "" ||  place.value.trim() === "") {
                     alert("모든 칸을 입력하세요.");
                     return;
@@ -96,6 +119,7 @@
 
                 if (!timePattern.test(time.value)) {
                     alert("시간은 09:00 형식으로 입력하세요.");
+                    time.focus();
                     return;
                 }
 
@@ -103,24 +127,38 @@
 
                 if (!sectionPattern.test(section.value.trim())) {
                     alert("분반은 1분반 형식으로 입력하세요.");
+                    section.focus();
                     return;
                 }
 
-                const d = scheduleList.find(function (item) {
-                    return item.subject === subject.value && item.class === section.value;
+                const d = scheduleList.findIndex(function (item) {
+                    return item.subject === subject.value && item.section === section.value;
                 });
-                if (d) {
+                if (d !== -1 && editIndex === -1) {
                     alert("이미 있는 과목입니다.");
                     return;
                 }
 
-                scheduleList.push({
-                    subject: subject.value,
-                    class: section.value,
-                    time: time.value,
-                    professor: professor.value,
-                    location: place.value
-                });
+                if(editIndex === -1){
+                    scheduleList.push({
+                        subject: subject.value,
+                        section: section.value,
+                        time: time.value,
+                        professor: professor.value,
+                        location: place.value
+                    });
+                }else{
+                    scheduleList[editIndex] = {
+                        subject: subject.value,
+                        section: section.value,
+                        time: time.value,
+                        professor: professor.value,
+                        location: place.value
+                    };
+                    editIndex = -1;
+                    addbtn.textContent = "ADD";
+                }
+                
 
                 subject.value = "";
                 section.value = "";
@@ -130,8 +168,7 @@
                 
                 render();
             });
-
-            
+            render();
         });
     </script>
 </head>
