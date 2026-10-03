@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule_Table</title>
+
+    <script>
+        let scheduleList = [
+            {
+                subject: "OSS",
+                class: "1분반",
+                time: "09:00",
+                professor: "장소연",
+                location: "NTH 414"
+            },
+            {
+                subject: "컴퓨터구조",
+                class: "1분반",
+                time: "15:00",
+                professor: "용환기",
+                location: "NTH 220"
+            },
+            {
+                subject: "이산수학",
+                class: "1분반",
+                time: "13:30",
+                professor: "최희열",
+                location: "NTH 313"
+            }
+        ];
+
+        window.addEventListener("load", function(){
+            const addbtn = document.querySelector("#addbtn");
+            const schedultTable = document.querySelector("#scheduleTable");
+            const list = document.querySelector("#list");
+
+            function render(){
+                list.innerHTML = "";
+                for(let i = 0; i < scheduleList.length; i++){
+                    const tr = document.createElement("tr");
+                    
+                    const tdSubject = document.createElement("td");
+                    tdSubject.textContent = scheduleList[i].subject;
+                    
+                    const tdClass = document.createElement("td");
+                    tdClass.textContent = scheduleList[i].class;
+                    
+                    const tdTime = document.createElement("td");
+                    tdTime.textContent = scheduleList[i].time;
+                    
+                    const tdProfessor = document.createElement("td");
+                    tdProfessor.textContent = scheduleList[i].professor;
+                    
+                    const tdLocation = document.createElement("td");
+                    tdLocation.textContent = scheduleList[i].location;
+                    
+                    tr.appendChild(tdSubject);
+                    tr.appendChild(tdClass);
+                    tr.appendChild(tdTime);
+                    tr.appendChild(tdProfessor);
+                    tr.appendChild(tdLocation);
+                    
+                    list.appendChild(tr);
+
+                    const btnE = document.createElement("button");
+                    btnE.textContent = "Edit";
+                    tr.appendChild(btnE);
+                    btnE.addEventListener("click",function(){
+
+                    });
+
+                    const btnX = document.createElement("button");
+                    btnX.textContent = "Delete";
+                    tr.appendChild(btnX);
+                    btnX.addEventListener("click",function(){
+                        scheduleList.splice(i, 1);
+                        render();
+                    });
+                }
+            }
+
+            addbtn.addEventListener("click",function(){
+                const subject = document.querySelector("#subject");
+                const section = document.querySelector("#section");
+                const time = document.querySelector("#time");
+                const professor = document.querySelector("#professor");
+                const place = document.querySelector("#location");
+
+                scheduleList.push({
+                    subject: subject.value,
+                    class: section.value,
+                    time: time.value,
+                    professor: professor.value,
+                    location: place.value
+                });
+
+                subject.value = "";
+                section.value = "";
+                time.value = "";
+                professor.value = "";
+                place.value = "";
+                
+                render();
+            });
+
+            
+        });
+    </script>
+</head>
+<body>
+    <input type="text" id="subject" placeholder="과목을 입력하세요."/><br>
+    <input type="text" id="section" placeholder="분반을 입력하세요."/><br>
+    <input type="text" id="time" placeholder="시작시간을 입력하세요."/><br>
+    <input type="text" id="professor" placeholder="교수님을 입력하세요."/><br>
+    <input type="text" id="location" placeholder="장소를 입력하세요."/><br><br>
+    <button id="addbtn">ADD</button><br><br>
+    
+    <h1>시간표</h1>
+    <table id="scheduleTable">
+        <thead>
+            <tr>
+                <th>과목</th>
+                <th>분반</th>
+                <th>시작시간</th>
+                <th>교수님</th>
+                <th>장소</th>
+            </tr>
+        </thead>
+        <tbody id="list">
+        </tbody>
+    </table>
+</body>
+</html>
